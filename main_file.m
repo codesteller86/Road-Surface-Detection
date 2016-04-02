@@ -17,7 +17,7 @@ close all
 %% Setup Matconvnet and paths
 
 run(fullfile(fileparts(mfilename('fullpath')), ...
-  'matconvnet-1.0-beta18', 'matlab', 'vl_setupnn.m')) ;
+  '..\', 'matconvnet-1.0-beta18', 'matlab', 'vl_setupnn.m')) ;
 
 addpath 'utils'
 
@@ -49,6 +49,15 @@ end
 %% Generate Training Data
 % Function genertaes training patches with labels
 train_data = generatePatch(Path, Exp);
+
+%% Training Parameters
+
+train_param         = trainParamCNN();
+train_param.expDir  = Path.experiment;
+
+
+net = trainCNN(imdb,Path,Exp,train_param);
+
 
 
 
