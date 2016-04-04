@@ -56,10 +56,27 @@ train_param         = trainParamCNN();
 train_param.expDir  = Path.experiment;
 
 
-net = trainCNN(imdb,Path,Exp,train_param);
+%% Arrage Training Data
+% Actual Data
+for i = 1 : length(train_data)
+    imdb.images.data(:,:,:,i) = train_data(i).im_patch;
+    imdb.images.labels(1,i)    = train_data(i).label;
+end
+sets = ones(1,length(train_data));
+sets(randperm(length(train_data),0.2*length(train_data))) = 2;
+
+imdb.images.set               = sets;
+
+% Metadata
+imdb.meta.sets                = {'train','val','test'};
+imdb.meta.classes             = {'non-road','road'};
 
 
+% Clear unused variables
+clear sets train_data
 
+%% Train Network
+net = trainCNN(imdb,Path,train_param);
 
 %% Before Exiting
 % Remove all paths before exiting
